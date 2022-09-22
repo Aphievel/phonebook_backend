@@ -7,6 +7,7 @@ app.use(
 		':method :url :status :res[content-length] - :response-time ms :content'
 	)
 );
+app.use(express.static('build'));
 
 morgan.token('content', function getContent(req) {
 	if (req.method === 'POST') {
