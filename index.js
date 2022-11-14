@@ -69,15 +69,20 @@ app.delete('/api/persons/:id', (request, response, next) => {
 app.post('/api/persons', (request, response) => {
 	if (!request.body.name || !request.body.number) {
 		return response.status(400).json({ error: 'Name or number missing' });
-	} else if (persons.find((person) => person.name === request.body.name)) {
-		return response.status(400).json({ error: 'Name must be unique' });
 	}
 	const person = new Person({
 		name: request.body.name,
 		number: request.body.number,
 	});
-	person.save();
-	response.json(person);
+	person
+		.save()
+		.then((res) => {
+			response.json(person);
+		})
+		.catch((error) => {
+			console.log(error.message);
+			response.status(400).json({ error: `${error.message}` });
+		});
 });
 
 app.put('/api/persons/:id', (request, response, next) => {
